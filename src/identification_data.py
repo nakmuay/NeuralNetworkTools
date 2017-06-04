@@ -41,9 +41,9 @@ class IdentificationDataSet:
         """
         self.data_set = []
         self.set_size = 0
-        self.add_data(data_set)
+        self.add(data_set)
 
-    def add_data(self, data):
+    def add(self, data):
         # TODO [martin]: add some validation of data here, e.g. check data size etc.
         if data:
             self.data_set.append(data)
@@ -192,18 +192,20 @@ class IdentificationData:
         else:
             self.number_of_samples = 0
 
-    def get_inputs(self):
+    @property
+    def input_names(self):
         if self.input_data:
             return list(self.input_data.keys())
         return []
 
-    def get_input_data(self, var):
-        return self.input_data[var]
-
-    def get_outputs(self):
+    @property
+    def output_names(self):
         if self.output_data:
             return list(self.output_data.keys())
         return []
+
+    def get_input_data(self, var):
+        return self.input_data[var]
 
     def get_output_data(self, var):
         return output_data[var]
@@ -243,18 +245,18 @@ class IdentificationData:
                     file_obj.write("\n")
 
     def _get_colheader_keys(self):
-        return self.get_inputs() + self.get_outputs()
+        return self.input_names + self.output_names
 
     def plot(self):
         """Plot object data.  
         """
         plt.subplot(2, 1, 1)
-        output_var = self.get_outputs()[0]
+        output_var = self.output_names[0]
         output_h, = plt.plot(self.output_data[output_var], label=output_var)
         plt.legend(handles=[output_h])
 
         plt.subplot(2, 1, 2)
-        input_var = self.get_inputs()[0]
+        input_var = self.input_names()[0]
         input_h, = plt.plot(self.input_data[input_var], label=input_var)
         plt.legend(handles=[input_h])
         
@@ -279,14 +281,14 @@ def main(file):
     inoutdat = IdentificationData(input_data, output_data, name="input_and_output")
 
     idset = IdentificationDataSet()
-    idset.add_data(indat)
-    idset.add_data(outdat)
-    idset.add_data(inoutdat)
+    idset.add(indat)
+    idset.add(outdat)
+    idset.add(inoutdat)
     with open("IdentificationData_serialization_test.txt", 'w') as f:
         idset.to_file(f)
 
     for d in idset.data_set:
-        print(d.get_inputs())
+        print(d.input_names)
 
 if __name__ == "__main__":
     # Boiler plate function

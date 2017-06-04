@@ -14,7 +14,7 @@ def main():
     #plt.show()
 
     data_set = IdentificationDataSet()
-    for i in range(50):
+    for i in range(10):
         sin_source_1 = SinusSource(100, 0.6, 0.05, 2*np.pi * (1.0 - 0.03*i))
         sin_source_2 = SinusSource(100, 0.4, 0.9, 2*np.pi * (1.0 + 0.04*i))
         signal_source = CompoundSource([sin_source_1, sin_source_2])
