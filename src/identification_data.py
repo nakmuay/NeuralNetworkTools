@@ -289,13 +289,10 @@ def main(file):
     for d in idset.data_set:
         print(d.input_names)
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Boiler plate function
     #input_path = r"C:\Users\Martin\Documents\Visual Studio 2015\Projects\NeuralNetwork\NeuralNetworkApp\bin\Debug\NetworkData"
     #iddata_file = os.path.join(input_path, "neural_net_reference_set.txt")
 
     #iddata_file = "neural_net_reference_set_error_1.txt"
     #main(iddata_file)
-
-
-
