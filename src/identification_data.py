@@ -131,12 +131,10 @@ class IdentificationData:
                 input_key = IdentificationData._remove_string_prefix(key, IdentificationData._input_prefix)
                 input_key_map[key] = input_key
                 input_data[input_key_map[key]] = np.empty(num_samples)
-                input_data[input_key_map[key]][0] = np.float(first_row[key])
             elif key.startswith(IdentificationData._output_prefix):
                 output_key = IdentificationData._remove_string_prefix(key, IdentificationData._output_prefix)
                 output_key_map[key] = output_key
                 output_data[output_key_map[key]] = np.empty(num_samples)
-                output_data[output_key_map[key]][0] = np.float(first_row[key])
             else:
                 raise ValueError("Unrecognized prefix in header: '{0}'".format(key))
         return (input_data, output_data, input_key_map, output_key_map)
@@ -175,7 +173,7 @@ class IdentificationData:
             return self.input_data[key][idx]
         if self.output_data and key in self.output_data.keys():
             return self.output_data[key][idx]
-        return None
+        return None 
 
     def __init__(self, input_data, output_data, name=''):
         """The constructor.  
@@ -183,14 +181,6 @@ class IdentificationData:
         self.input_data = input_data
         self.output_data = output_data
         self.name = name
-
-        # TODO [martin]: this should be cleaned up
-        if self.input_data:
-            self.number_of_samples = len(next(iter(self.input_data.values())))
-        elif self.output_data:
-            self.number_of_samples = len(next(iter(self.output_data.values())))
-        else:
-            self.number_of_samples = 0
 
     @property
     def input_names(self):
@@ -204,12 +194,21 @@ class IdentificationData:
             return list(self.output_data.keys())
         return []
 
+    @property
+    def number_of_samples(self):
+        if self.input_data:
+            return len(next(iter(self.input_data.values())))
+        elif self.output_data:
+            return len(next(iter(self.output_data.values())))
+        else:
+            return 0
+
     def get_input_data(self, var):
         return self.input_data[var]
 
     def get_output_data(self, var):
         return output_data[var]
-
+    
     def to_file(self, file_obj):
         # write header
         self._write_header_to_file(file_obj)
@@ -295,8 +294,8 @@ if __name__ == "__main__":
     #input_path = r"C:\Users\Martin\Documents\Visual Studio 2015\Projects\NeuralNetwork\NeuralNetworkApp\bin\Debug\NetworkData"
     #iddata_file = os.path.join(input_path, "neural_net_reference_set.txt")
 
-    iddata_file = "neural_net_reference_set_error_1.txt"
-    main(iddata_file)
+    #iddata_file = "neural_net_reference_set_error_1.txt"
+    #main(iddata_file)
 
 
 
