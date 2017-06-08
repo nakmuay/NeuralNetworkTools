@@ -6,17 +6,23 @@ from identification_data import IdentificationData
 class TestIdentificationDataDeserialization(unittest.TestCase):
 
     def setUp(self):
-        self.test_data_path = "../test_data"
+        self.input_filename = "proper_iddata.txt"
+        self.input_path = "../test_data"
 
-class TestSimpleIdentificationDataDeserialization(TestIdentificationDataDeserialization):
+    @property
+    def input_filepath(self):
+        return os.path.join(self.input_path, self.input_filename)
 
     def runTest(self):
-        filename = os.path.join(self.test_data_path, "proper_identification_data.txt")
-        print(filename)
-        with open(filename) as f:
+        with open(self.input_filepath) as f:
            dat = IdentificationData.from_file(f)
         assert 1 == 1
 
+class TestSimpleIdentificationDataDeserialization(TestIdentificationDataDeserialization):
+
+    def setUp(self):
+        self.input_filename = "simple_iddata.txt"
+        super(TestSimpleIdentificationDataDeserialization, self).setUp()
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,7 @@
+name:experiment_0
+number_of_samples:4
+input:input_var_0,output:output_var_0
+0,0
+1.0,0.2
+2.0,0.4
+3.0,0.6
