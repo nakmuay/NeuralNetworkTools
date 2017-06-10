@@ -12,7 +12,8 @@ def read_delimited_line(file_obj, delim=' '):
     return line.strip().split(delim)
 
 class IdentificationDataSet:
-    """Class which represents a set of input/output-data from a simulated system.  
+    """
+    Class which represents a set of input/output-data from a simulated system.  
     """
 
     # Static variables
@@ -21,7 +22,8 @@ class IdentificationDataSet:
 
     # Static methods
     def from_file(file_obj):
-        """Factory method for creating object from file.  
+        """
+        Factory method for creating object from file.  
         """
         data_set = []
         _ = next(file_obj)                                  # skip one line
@@ -37,7 +39,8 @@ class IdentificationDataSet:
         return IdentificationDataSet(data_set)
 
     def __init__(self, data_set=[]):
-        """The constructor.  
+        """
+        The constructor.  
         """
         self.data_set = []
         self.set_size = 0
@@ -59,7 +62,8 @@ class IdentificationDataSet:
             write_line(file_obj)
 
     def plot(self):
-        """Plot object data.  
+        """
+        Plot object data.  
         """
         for iddata in self.data_set:
             plt.figure()
@@ -67,7 +71,8 @@ class IdentificationDataSet:
 
 
 class IdentificationData:
-    """Class which represent input/output-data from a simulated system.  
+    """
+    Class which represent input/output-data from a simulated system.  
     """
 
     # static variables
@@ -81,7 +86,8 @@ class IdentificationData:
     
     # static methods
     def from_file(file_obj):
-        """Factory method for creating object from file.  
+        """
+        Factory method for creating object from file.  
         """
         header = IdentificationData._read_header(file_obj)
         if not header:
@@ -100,7 +106,8 @@ class IdentificationData:
         return IdentificationData(input_data, output_data, name=header["name"])
 
     def _read_header(file_obj):
-        """Helper method which reads header information.  
+        """
+        Helper method which reads header information.  
         """
         header = {"name": '', "number_of_samples": ''}
         line = read_delimited_line(file_obj, IdentificationData._header_delim)
@@ -115,7 +122,8 @@ class IdentificationData:
         return header
 
     def _allocate_data(reader, num_samples):
-        """Helper method for allocating data.  
+        """
+        Helper method for allocating data.  
         """
         # declare key maps to map from header in file to dictionary keys
         input_key_map = {}
@@ -140,7 +148,8 @@ class IdentificationData:
         return (input_data, output_data, input_key_map, output_key_map)
 
     def _read_data(reader, input_data, output_data, input_key_map, output_key_map, num_samples):
-        """Helper method for reading data.
+        """
+        Helper method for reading data.
         """
         for row_nr, row in enumerate(reader):
             for key in row:
@@ -155,7 +164,8 @@ class IdentificationData:
         return (input_data, output_data)
         
     def _remove_string_prefix(string, prefix):
-        """Helper method for removing string prefix.  
+        """
+        Helper method for removing string prefix.  
         """
         if string.startswith(prefix):
             return string[len(prefix):]
@@ -176,7 +186,8 @@ class IdentificationData:
         return None 
 
     def __init__(self, input_data, output_data, name=''):
-        """The constructor.  
+        """
+        The constructor.  
         """
         self.input_data = input_data
         self.output_data = output_data
@@ -247,7 +258,8 @@ class IdentificationData:
         return self.input_names + self.output_names
 
     def plot(self):
-        """Plot object data.  
+        """
+        Plot object data.  
         """
         plt.subplot(2, 1, 1)
         output_var = self.output_names[0]
