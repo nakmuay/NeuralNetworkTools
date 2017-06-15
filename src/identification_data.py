@@ -96,13 +96,9 @@ class IdentificationData:
         
         # read first line and allocate data
         reader = csv.DictReader(file_obj)
-        input_data, output_data, input_key_map, output_key_map = IdentificationData._allocate_data(reader, \
-                                                                                                    header["number_of_samples"])
+        
         # read remaining data
-        input_data, output_data = IdentificationData._read_data(reader, \
-                                                                 input_data, output_data, \
-                                                                 input_key_map, output_key_map, \
-                                                                 header["number_of_samples"]-2)
+        input_data, output_data = IdentificationData._read_data(reader, header["number_of_samples"])
         return IdentificationData(input_data, output_data, name=header["name"])
 
     def _read_header(file_obj):
@@ -121,44 +117,29 @@ class IdentificationData:
         header["number_of_samples"] = int(line[1])
         return header
 
-    def _allocate_data(reader, num_samples):
-        """
-        Helper method for allocating data.  
-        """
-        # declare key maps to map from header in file to dictionary keys
-        input_key_map = {}
-        output_key_map = {}
-        # declare dictionaries to hold results
-        input_data = {}
-        output_data = {}
-
-        # read first row and allocate data
-        first_row = next(reader)
-        for key in first_row:
-            if key.startswith(IdentificationData._input_prefix):
-                input_key = IdentificationData._remove_string_prefix(key, IdentificationData._input_prefix)
-                input_key_map[key] = input_key
-                input_data[input_key_map[key]] = np.empty(num_samples)
-            elif key.startswith(IdentificationData._output_prefix):
-                output_key = IdentificationData._remove_string_prefix(key, IdentificationData._output_prefix)
-                output_key_map[key] = output_key
-                output_data[output_key_map[key]] = np.empty(num_samples)
-            else:
-                raise ValueError("Unrecognized prefix in header: '{0}'".format(key))
-        return (input_data, output_data, input_key_map, output_key_map)
-
-    def _read_data(reader, input_data, output_data, input_key_map, output_key_map, num_samples):
+    def _read_data(reader, num_samples):
         """
         Helper method for reading data.
         """
+
+        # Allocate data
+        input_data = {}
+        output_data = {}
         for row_nr, row in enumerate(reader):
             for key in row:
                 # read input
-                if "input" in key:
-                    input_data[input_key_map[key]][row_nr+1] = np.float(row[key])
-                # read output
-                if "output" in key:
-                    output_data[output_key_map[key]][row_nr+1] = np.float(row[key])
+                if key.startswith(IdentificationData._input_prefix):
+                    name = IdentificationData._remove_string_prefix(key, IdentificationData._input_prefix)
+                    if row_nr == 0:
+                        input_data[name] = np.empty(num_samples)
+                    input_data[name][row_nr] = np.float(row[key])
+                elif key.startswith(IdentificationData._output_prefix):
+                    name = IdentificationData._remove_string_prefix(key, IdentificationData._output_prefix)
+                    if row_nr == 0:
+                        output_data[name] = np.empty(num_samples)
+                    output_data[name][row_nr] = np.float(row[key])
+                else:
+                    raise ValueError("Unrecognized prefix in header: '{0}'".format(key))
             if row_nr == num_samples:
                 break
         return (input_data, output_data)
