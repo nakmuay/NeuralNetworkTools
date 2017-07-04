@@ -1,27 +1,5 @@
 import numpy as np
-
-class NamedColumnsArrayBuilder():
-        
-    def __init__(self):
-        self._column_names = []
-        self._data = []
-
-    def add_column(self, column_name, data):
-        self._column_names.append(column_name)
-
-        if not self.data:
-            self.data.append(data)
-        else:
-            for row_nr, row in enumerate(self.data):
-                row.append(data[row_nr])
-
-    @property
-    def column_names(self):
-        return self._column_names
-    
-    @property
-    def data(self):
-        return self._data
+from collections import defaultdict
 
 class NamedColumnsArray(np.ndarray):
 
@@ -60,6 +38,25 @@ class NamedColumnsArray(np.ndarray):
     @property 
     def column_names(self):
         return self._column_names
+
+class IdentificationDataFromFileFactory():
+
+    # static variables
+    _header_delim = ':' 
+    _data_delim = ',' 
+    _input_prefix = "input" + _header_delim
+    _output_prefix = "output" + _header_delim
+    
+    _name_format = "name" + _header_delim + "{0}"
+    _num_samples_format = "number_of_samples" + _header_delim + "{0}"
+
+    def __init__(self, reader):
+        self._reader = reader
+        self._input_data = defaultdict(list)
+        self._output_data = defaultdict(list)
+
+    def create(self):
+        input_data = default_dict();
 
 class IdentificationData():
 
