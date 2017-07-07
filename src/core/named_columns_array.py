@@ -1,5 +1,4 @@
 import numpy as np
-from collections import defaultdict
 
 class NamedColumnsArray(np.ndarray):
 
@@ -39,45 +38,29 @@ class NamedColumnsArray(np.ndarray):
     def column_names(self):
         return self._column_names
 
-class IdentificationDataFromFileFactory():
-
-    # static variables
-    _header_delim = ':' 
-    _data_delim = ',' 
-    _input_prefix = "input" + _header_delim
-    _output_prefix = "output" + _header_delim
-    
-    _name_format = "name" + _header_delim + "{0}"
-    _num_samples_format = "number_of_samples" + _header_delim + "{0}"
-
-    def __init__(self, reader):
-        self._reader = reader
-        self._input_data = defaultdict(list)
-        self._output_data = defaultdict(list)
-
-    def create(self):
-        input_data = default_dict();
-
-class IdentificationData():
-
-    def __init__(self, input_data, output_data):
-        self._input_data = input_data
-        self._output_data = output_data
-
-    @property
-    def input_data(self):
-        return self._input_data
-
-    @property
-    def input_names(self):
-        return self._input_data.names
-
-    @property
-    def output_data(self):
-        return self._output_data
-
-    @property
-    def output_names(self):
-        return self._output_data.names
-
+class NamedColumnsArrayBuilder():
         
+    def __init__(self):
+        self._column_names = []
+        self._data = []
+
+    @property
+    def column_names(self):
+        return self._column_names
+    
+    @property
+    def data(self):
+        return self._data
+
+    def append_row(self, row):
+        if not row:
+            raise ValueError("Cannot add an empty row!")
+        if not self.data:
+            self._column_names = row.keys()
+
+        self.data.append([])
+        for col in self.column_names:
+            self.data[-1].append(row[col])
+
+    def build(self):
+        return NamedColumnsArray(np.array(self.data, np.float64), self.column_names)

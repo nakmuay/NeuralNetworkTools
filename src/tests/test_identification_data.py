@@ -2,7 +2,7 @@ import unittest
 import os
 import numpy as np
 
-from identification_data import IdentificationData
+import src
 
 class TestIdentificationDataDeserialization(unittest.TestCase):
 

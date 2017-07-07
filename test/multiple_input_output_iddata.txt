@@ -1,0 +1,7 @@
+name:simple_iddata
+number_of_samples:4
+input:input_var_0,output:output_var_0,input:input_var_1,output:output_var_1
+1.0,0.2,10,0.22
+2.0,0.4,20,0.44
+3.0,0.6,30,0.66
+4.0,0.8,40,0.88
