@@ -1,2 +1,2 @@
 #!/bin/bash
-export PYTHONPATH=$PYTHONPATH:/src
+export PYTHONPATH=$PYTHONPATH:/home/martin/github/NeuralNetworkTools/src

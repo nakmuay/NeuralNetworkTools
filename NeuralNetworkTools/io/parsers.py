@@ -1,53 +1,14 @@
 import numpy as np
 import csv
 
-from named_columns_array import NamedColumnsArray, NamedColumnsArrayBuilder
-
-class IdentificationData():
-
-    def __init__(self, input_data, output_data):
-        self._input_data = input_data
-        self._output_data = output_data
-        self._current_sample = 0
-
-    @property
-    def input_data(self):
-        return self._input_data
-
-    @property
-    def input_names(self):
-        return self._input_data.column_names
-
-    @property
-    def output_data(self):
-        return self._output_data
-
-    @property
-    def output_names(self):
-        return self._output_data.column_names
-
-    @property
-    def shape(self):
-        num_rows = 0
-        if self.input_data.size != 0:
-            num_rows,num_input_cols = self.input_data.shape
-        if self.output_data.size != 0:
-            num_rows,num_output_cols = self.output_data.shape
-        return (num_rows, num_input_cols, num_output_cols)
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._current_sample > self.shape[0]-1:
-            raise StopIteration
-        else:
-            self._current_sample += 1
-            return IdentificationData(self._input_data[self._current_sample-1, :], \
-                                        self._output_data[self._current_sample-1, :])
+#from NeuralNetworkTools.core.named_columns_array import NamedColumnsArray, NamedColumnsArrayBuilder
+from NeuralNetworkTools.core import * 
 
 
-class IdentificationDataFromFileFactory():
+def from_file(filename):
+    return IdentificationDataParser(filename).create()
+
+class IdentificationDataParser():
 
     # static variables
     _header_delim = ':' 
@@ -74,20 +35,20 @@ class IdentificationDataFromFileFactory():
         Helper method which reads header information.                         
         """                                                                   
         header = {"name": '', "number_of_samples": ''}                        
-        line = self._read_delimited_line(file_obj, IdentificationDataFromFileFactory._header_delim)
+        line = self._read_delimited_line(file_obj, IdentificationDataParser._header_delim)
         if len(line) < 2:                                                     
             return None                                                       
         header["name"] = line[1]                                              
                                                                               
-        line = self._read_delimited_line(file_obj, IdentificationDataFromFileFactory._header_delim)
+        line = self._read_delimited_line(file_obj, IdentificationDataParser._header_delim)
         if len(line) < 2:                                                     
             return None                                                       
         header["number_of_samples"] = int(line[1])                            
         return header
 
     def _read_data(self, fileobj):
-        input_prefix = IdentificationDataFromFileFactory._input_prefix
-        output_prefix = IdentificationDataFromFileFactory._output_prefix
+        input_prefix = IdentificationDataParser._input_prefix
+        output_prefix = IdentificationDataParser._output_prefix
         
         reader = csv.DictReader(fileobj)
         for row in reader:
@@ -95,10 +56,10 @@ class IdentificationDataFromFileFactory():
             output_dict = {}
             for key in row:
                 if key.startswith(input_prefix):
-                    name = IdentificationDataFromFileFactory._remove_string_prefix(key, input_prefix)
+                    name = IdentificationDataParser._remove_string_prefix(key, input_prefix)
                     input_dict[name] = row[key]
-                elif key.startswith(IdentificationDataFromFileFactory._output_prefix):
-                    name = IdentificationDataFromFileFactory._remove_string_prefix(key, output_prefix)
+                elif key.startswith(output_prefix):
+                    name = IdentificationDataParser._remove_string_prefix(key, output_prefix)
                     output_dict[name] = row[key]
                 else:
                     raise ValueError("Unrecognized prefix in header: '{0}'".format(key))

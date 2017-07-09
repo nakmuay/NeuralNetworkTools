@@ -5,16 +5,22 @@ class NamedColumnsArray(np.ndarray):
     def __new__(cls, input_array, column_names=None):
         obj = np.asarray(input_array).view(cls)
         obj._column_names = column_names
-        obj._column_names_idx = dict((idx, key) for key, idx in enumerate(column_names))
+        
+        # Add default column names
+        if not column_names:
+            for i in range(input_array.shape()[1]):
+                print(i)
+            #obj._column_names = 
         return obj
 
     def __array_finalize__(self, obj):
         if obj is None: return
         self._column_names = getattr(obj, "_column_names", None)
-        self._column_names_idx = getattr(obj, "_column_names_idx", None)
 
     def __getitem__(self, idx):
         _idx = self._getindeces(idx)
+        if isinstance(_idx, tuple):
+            self._column_names = [self._column_names[i] for i in _idx[1]]
         return super(NamedColumnsArray, self).__getitem__(_idx)
 
     def __setitem__(self, idx, value):
@@ -27,7 +33,7 @@ class NamedColumnsArray(np.ndarray):
 
         names = idx[1]
         if not self._is_list_of_strings(names): return idx
-        return (idx[0], [self._column_names_idx[name] for name in names])
+        return (idx[0], [self.column_names.index(name) for name in names])
 
     def _is_list_of_strings(self, obj):
         if isinstance(obj, list):
@@ -56,7 +62,7 @@ class NamedColumnsArrayBuilder():
         if not row:
             raise ValueError("Cannot add an empty row!")
         if not self.data:
-            self._column_names = row.keys()
+            self._column_names = list(row.keys())
 
         self.data.append([])
         for col in self.column_names:
