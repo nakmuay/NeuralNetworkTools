@@ -1,6 +1,8 @@
 import numpy as np
 import csv
+import sys
 
+sys.path.append("/home/martin/github/NeuralNetworkTools")
 from NeuralNetworkTools.core.named_columns_array import NamedColumnsArray, NamedColumnsArrayBuilder
 
 class IdentificationData():
@@ -56,7 +58,6 @@ class IdentificationData():
             output_data = self.output_data[idx]
 
         return IdentificationData(input_data, output_data)
-
 
     def __iter__(self):
         return self

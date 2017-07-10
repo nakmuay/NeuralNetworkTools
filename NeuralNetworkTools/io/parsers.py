@@ -1,7 +1,7 @@
 import numpy as np
 import csv
 
-#from NeuralNetworkTools.core.named_columns_array import NamedColumnsArray, NamedColumnsArrayBuilder
+from NeuralNetworkTools.core.named_columns_array import NamedColumnsArray, NamedColumnsArrayBuilder
 from NeuralNetworkTools.core import * 
 
 

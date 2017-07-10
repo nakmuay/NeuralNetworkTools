@@ -16,7 +16,7 @@ class TestIdentificationDataDeserialization(unittest.TestCase):
     @property
     def test_filepath(self):
         return os.path.join(self.test_data_path, self.data_filename)
-    """
+    
     def test_simple_iddata(self):
         self.data_filename = "simple_iddata.txt"
 
@@ -24,7 +24,7 @@ class TestIdentificationDataDeserialization(unittest.TestCase):
         self.expected_input_data = {"input_var_0": np.array([[1.0], [2.0], [3.0], [4.0]])}
         self.expected_output_data = {"output_var_0": np.array([[0.2], [0.4], [0.6], [0.8]])}
         self.perform_test()
-    """
+    
     def test_multiple_input_output_iddata(self):
         self.data_filename = "multiple_input_output_iddata.txt"
 
@@ -51,8 +51,7 @@ class TestIdentificationDataDeserialization(unittest.TestCase):
 
         # Compare data
         for k in expected.keys():
-            np.testing.assert_array_almost_equal(actual[:, [k]], expected[k])
-
+            np.testing.assert_array_almost_equal(actual[:, [k]].data, expected[k])
 
 class TestIdentificationDataIndexing(unittest.TestCase):
 
@@ -62,14 +61,12 @@ class TestIdentificationDataIndexing(unittest.TestCase):
         self.data = IdentificationData(input_data, output_data) 
 
     def test_row_indexing(self):
-        """
-        iddata = self.data[:]
-        print(iddata.input_data.column_names)
+        iddata = self.data[:, ["input_2", "input_1"], ["output_2"]]
         print(iddata.input_data)
-        print(iddata.output_data.column_names)
         print(iddata.output_data)
-        print()
+        #print()
 
+        """
         iddata = self.data[:, [0]]
         print(iddata.input_data.column_names)
         print(iddata.input_data)
