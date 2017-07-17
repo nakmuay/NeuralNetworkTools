@@ -1,56 +1,71 @@
 import numpy as np
 
-class NamedColumnsArray():
+class NamedColumnsArray(np.ndarray):
 
-    def __init__(self, input_array, column_names=None):
-        self._data = np.asarray(input_array)
-        self._column_names = column_names
+    def __new__(cls, arr, column_names=None):
+        obj = np.asarray(arr).view(cls)
         
         # Add default column names
-        _column_names = []
         if not column_names:
-            for i in range(input_array.shape[1]):
-                _column_names.append("column_{0}".format(i))
-            self._column_names = _column_names
+            column_names_ = []
+            for i in range(arr.shape[1]):
+                column_names_.append("column_{0}".format(i))
+        else:
+            column_names_ = column_names
+        obj._column_names = column_names_
 
+        return obj
+
+    """
+    @classmethod
+    def _validate_new_inputs(self, arr, column_names):
+        # If no column_names were supplied we do not need to validate them
+        if not column_names: return
+
+        if len(column_names) != arr.shape(1):
+            raise ValueError("Dimension mismatch. Number of columns in array must equal the number of column names.")
+    """
+
+    def __array_finalize__(self, obj):
+        if obj is None:
+            return
+        self._column_names = getattr(obj, "_column_names", None)
+    
     def __getitem__(self, idx):
-        _idx = self._getindeces(idx)
-        _column_names = self.column_names 
-        if isinstance(_idx, tuple):
-            if isinstance(_idx[1], list):
-                _column_names = [self.column_names[i] for i in _idx[1]]
+        idx_ = self._getindeces(idx)
+        arr = super(NamedColumnsArray, self).__getitem__(idx_)
+        
+        column_names_ = self._column_names
+        if isinstance(idx_, tuple):
+            # Note that this code to fail if Ellipsis indexing is used since column_names cannot be indexed using Ellipsis objects.
+            if isinstance(idx_[1], list):
+                column_names_ = [self._column_names[i] for i in idx_[1]]
             else:
-                _column_names = self._column_names[_idx[1]]
-        return NamedColumnsArray(self._data[_idx], _column_names)
+                column_names_ = self._column_names[idx_[1]]
+        return NamedColumnsArray(arr, column_names_)
 
-    def __setitem__(self, idx, value):
-        _idx = self._getindeces(idx)
-        self._data[_idx] = value
-
-    def _getindeces(self, idx):
+    def _getindeces(self, keys):
         # Check if columns are indexed
-        if not isinstance(idx, tuple): return idx
-
-        names = idx[1]
-        if not self._is_list_of_strings(names): return idx
-        return (idx[0], [self.column_names.index(name) for name in names])
+        if isinstance(keys, tuple):
+            if self._is_list_of_strings(keys[1]):
+                return (keys[0], [self.column_names.index(key) for key in keys[1]])
+            else:
+                return keys
+        else:
+            return keys
 
     def _is_list_of_strings(self, obj):
         if isinstance(obj, list):
             return all(isinstance(elem, str) for elem in obj)
         return False
-
-    def __str__(self):
-        array_str = self._data.__str__()
-        return "{0}\n{1}".format(self.column_names, array_str)
-
+   
     @property 
     def column_names(self):
         return self._column_names
 
-    @property 
-    def data(self):
-        return self._data
+    def __str__(self):
+        array_str = super(NamedColumnsArray, self).__str__()
+        return "{0}\n{1}".format(self.column_names, array_str)
 
 class NamedColumnsArrayBuilder():
         

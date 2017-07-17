@@ -9,38 +9,36 @@ from NeuralNetworkTools.core.named_columns_array import NamedColumnsArray, Named
 class TestNamedArray(unittest.TestCase):
     
     def setUp(self):
-        self.arr = np.array([[1, 10], [2, 20], [3, 30]])
+        self.arr = np.array([[1, 10, 100], [2, 20, 200], [3, 30, 300]])
         self.default_named_arr = NamedColumnsArray(self.arr)
-        self.named_arr = NamedColumnsArray(self.arr, ['a', 'b'])
+        self.named_arr = NamedColumnsArray(self.arr, ['a', 'b', 'c'])
 
     def test_np_indexing(self):
-        # Test access without indexing
-        np.testing.assert_array_almost_equal(self.arr, self.named_arr.data)
-        np.testing.assert_array_almost_equal(self.arr, self.default_named_arr.data)
-        
         # Test indexing when default column names are used
-        np.testing.assert_array_almost_equal(self.arr[:], self.default_named_arr[:].data)
-        np.testing.assert_array_almost_equal(self.arr[:, 0], self.default_named_arr[:, 0].data)
-        np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.default_named_arr[:, 0:2].data)
-        np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.default_named_arr[0:2, 0:2].data)
+        np.testing.assert_array_almost_equal(self.arr[:], self.default_named_arr[:])
+        np.testing.assert_array_almost_equal(self.arr[:, [0]], self.default_named_arr[:, [0]])
+        np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.default_named_arr[:, 0:2])
+        np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.default_named_arr[0:2, 0:2])
    
         # Test indexing when default column names are used
-        np.testing.assert_array_almost_equal(self.arr[:], self.named_arr[:].data)
-        np.testing.assert_array_almost_equal(self.arr[:, 0], self.named_arr[:, 0].data)
-        np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.named_arr[:, 0:2].data)
-        np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.named_arr[0:2, 0:2].data)
+        np.testing.assert_array_almost_equal(self.arr[:], self.named_arr[:])
+        np.testing.assert_array_almost_equal(self.arr[:, 0], self.named_arr[:, 0])
+        np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.named_arr[:, 0:2])
+        np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.named_arr[0:2, 0:2])
 
     def test_named_indexing(self):
         # Test indexing when default column names are used
-        np.testing.assert_array_almost_equal(self.arr[:, [0]], self.default_named_arr[:, ["column_0"]].data)
-        np.testing.assert_array_almost_equal(self.arr[:, [0,1]], self.default_named_arr[:, ["column_0", "column_1"]].data)
-        np.testing.assert_array_almost_equal(self.arr[0:2, [1, 0]], self.default_named_arr[0:2, ["column_1", "column_0"]].data)
+        np.testing.assert_array_almost_equal(self.arr[:, [0]], self.default_named_arr[:, ["column_0"]])
+        np.testing.assert_array_almost_equal(self.arr[:, [0,1]], self.default_named_arr[:, ["column_0", "column_1"]])
+        np.testing.assert_array_almost_equal(self.arr[0:2, [1, 0]], self.default_named_arr[0:2, ["column_1", "column_0"]])
    
         # Test indexing when default column names are used
-        np.testing.assert_array_almost_equal(self.arr[:], self.named_arr[:].data)
-        np.testing.assert_array_almost_equal(self.arr[:, [0]], self.named_arr[:, ['a']].data)
-        np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.named_arr[:, ['a', 'b']].data)
-        np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.named_arr[0:2, ['a', 'b']].data)
+        np.testing.assert_array_almost_equal(self.arr[:], self.named_arr[:])
+        np.testing.assert_array_almost_equal(self.arr[:, [0]], self.named_arr[:, ['a']])
+        np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.named_arr[:, ['a', 'b']])
+        np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.named_arr[0:2, ['a', 'b']])
+        print(self.default_named_arr[:, ["column_1", "column_0"]])
+        print(self.named_arr)
 
 """
 class TestNamedArrayBuilder(unittest.TestCase):

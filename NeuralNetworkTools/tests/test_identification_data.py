@@ -64,7 +64,7 @@ class TestIdentificationDataIndexing(unittest.TestCase):
         iddata = self.data[:, ["input_2", "input_1"], ["output_2"]]
         print(iddata.input_data)
         print(iddata.output_data)
-        #print()
+        print()
 
         """
         iddata = self.data[:, [0]]
