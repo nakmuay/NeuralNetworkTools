@@ -13,6 +13,9 @@ class TestNamedArray(unittest.TestCase):
         self.default_named_arr = NamedColumnsArray(self.arr)
         self.named_arr = NamedColumnsArray(self.arr, ['a', 'b', 'c'])
 
+    def test_creation_init(self):
+        _ = NamedColumnsArray(self.arr, ['a', 'b', 'c'])
+
     def test_np_indexing(self):
         # Test indexing when default column names are used
         np.testing.assert_array_almost_equal(self.arr[:], self.default_named_arr[:])
@@ -37,10 +40,7 @@ class TestNamedArray(unittest.TestCase):
         np.testing.assert_array_almost_equal(self.arr[:, [0]], self.named_arr[:, ['a']])
         np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.named_arr[:, ['a', 'b']])
         np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.named_arr[0:2, ['a', 'b']])
-        print(self.default_named_arr[:, ["column_1", "column_0"]])
-        print(self.named_arr)
 
-"""
 class TestNamedArrayBuilder(unittest.TestCase):
 
     def runTest(self):
@@ -49,7 +49,6 @@ class TestNamedArrayBuilder(unittest.TestCase):
         builder.append_row({'b': 20, 'a': 10})
         print(builder.column_names)
         print(builder.data)
-"""
 
 if __name__ == "__main__":
     unittest.main()

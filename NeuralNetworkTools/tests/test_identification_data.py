@@ -103,5 +103,16 @@ class TestIdentificationDataIndexing(unittest.TestCase):
         print()
         """
 
+    def test_iter(self):
+        print("first iter")
+        for d in self.data:
+            print(d.input_data)
+            print(d.output_data)
+
+        print("second iter")
+        for d in self.data:
+            print(d.input_data)
+            print(d.output_data)
+
 if __name__ == "__main__":
     unittest.main()
