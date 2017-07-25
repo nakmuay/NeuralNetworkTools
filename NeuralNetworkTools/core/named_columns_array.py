@@ -4,31 +4,28 @@ class NamedColumnsArray(np.ndarray):
 
     def __new__(cls, arr, column_names=None):
         obj = np.asarray(arr).view(cls)
-        
-        # Add default column names
-        if not column_names:
-            column_names_ = []
-            for i in range(arr.shape[1]):
-                column_names_.append("column_{0}".format(i))
-        else:
+
+        # Handle column names
+        #NamedColumnsArray._validate_new_inputs(arr, column_names)
+        if column_names:
             column_names_ = column_names
+        else:
+            # Add default column names
+            column_names_ = ["column_{0}".format(i) for i in range(arr.shape[1])]
         obj._column_names = column_names_
 
         return obj
 
-    """
     @classmethod
     def _validate_new_inputs(self, arr, column_names):
         # If no column_names were supplied we do not need to validate them
         if not column_names: return
 
-        if len(column_names) != arr.shape(1):
+        if len(column_names) != arr.shape[1]:
             raise ValueError("Dimension mismatch. Number of columns in array must equal the number of column names.")
-    """
 
     def __array_finalize__(self, obj):
-        if obj is None:
-            return
+        if obj is None: return
         self._column_names = getattr(obj, "_column_names", None)
     
     def __getitem__(self, idx):

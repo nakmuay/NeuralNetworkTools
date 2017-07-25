@@ -10,23 +10,15 @@ class IdentificationData():
     def __init__(self, input_data, output_data):
         self._input_data = input_data
         self._output_data = output_data
-        self._current_sample = 0
+        self._iter_counter = 0
 
     @property
     def input_data(self):
         return self._input_data
 
     @property
-    def input_names(self):
-        return self._input_data.column_names
-
-    @property
     def output_data(self):
         return self._output_data
-
-    @property
-    def output_names(self):
-        return self._output_data.column_names
 
     @property
     def shape(self):
@@ -60,12 +52,17 @@ class IdentificationData():
         return IdentificationData(input_data, output_data)
 
     def __iter__(self):
+        # Reset iteration counter 
+        self._reset_iter_counter()
         return self
 
     def __next__(self):
-        if self._current_sample > self.shape[0]-1:
+        if self._iter_counter > self.shape[0]-1:
             raise StopIteration
         else:
-            self._current_sample += 1
-            return IdentificationData(self._input_data[self._current_sample-1, :], \
-                                        self._output_data[self._current_sample-1, :])
+            self._iter_counter += 1
+            return IdentificationData(self._input_data[self._iter_counter-1, :], \
+                                        self._output_data[self._iter_counter-1, :])
+
+    def _reset_iter_counter(self):
+        self._iter_counter = 0
