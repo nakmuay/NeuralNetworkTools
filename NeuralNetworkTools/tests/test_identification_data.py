@@ -66,42 +66,20 @@ class TestIdentificationDataIndexing(unittest.TestCase):
         print(iddata.output_data)
         print()
 
-        """
         iddata = self.data[:, [0]]
-        print(iddata.input_data.column_names)
         print(iddata.input_data)
-        print(iddata.output_data.column_names)
         print(iddata.output_data)
         print()
 
         iddata = self.data[:, [0], [1]]
-        print(iddata.input_data.column_names)
         print(iddata.input_data)
-        print(iddata.output_data.column_names)
         print(iddata.output_data)
         print()
        
         iddata = self.data[0:2, [0], [1]]
-        print(iddata.input_data.column_names)
         print(iddata.input_data)
-        print(iddata.output_data.column_names)
         print(iddata.output_data)
         print()
-
-        iddata = self.data[[0], ...]
-        print(iddata.input_data.column_names)
-        print(iddata.input_data[:])
-        print(iddata.output_data.column_names)
-        print(iddata.output_data)
-        print()
-
-        iddata = self.data[..., [0]]
-        print(iddata.input_data.column_names)
-        print(iddata.input_data[:])
-        print(iddata.output_data.column_names)
-        print(iddata.output_data)
-        print()
-        """
 
     def test_iter(self):
         print("first iter")

@@ -40,6 +40,10 @@ class TestNamedArray(unittest.TestCase):
         np.testing.assert_array_almost_equal(self.arr[:, [0]], self.named_arr[:, ['a']])
         np.testing.assert_array_almost_equal(self.arr[:, 0:2], self.named_arr[:, ['a', 'b']])
         np.testing.assert_array_almost_equal(self.arr[0:2, 0:2], self.named_arr[0:2, ['a', 'b']])
+    
+    def test_printing(self):
+        print("before printing")
+        print(self.named_arr)
 
 class TestNamedArrayBuilder(unittest.TestCase):
 
@@ -47,8 +51,6 @@ class TestNamedArrayBuilder(unittest.TestCase):
         builder = NamedColumnsArrayBuilder()
         builder.append_row({'a': 1, 'b': 2})
         builder.append_row({'b': 20, 'a': 10})
-        print(builder.column_names)
-        print(builder.data)
 
 if __name__ == "__main__":
     unittest.main()

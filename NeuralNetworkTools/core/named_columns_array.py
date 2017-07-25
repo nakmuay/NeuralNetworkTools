@@ -31,15 +31,18 @@ class NamedColumnsArray(np.ndarray):
     def __getitem__(self, idx):
         idx_ = self._getindeces(idx)
         arr = super(NamedColumnsArray, self).__getitem__(idx_)
-        
-        column_names_ = self._column_names
-        if isinstance(idx_, tuple):
-            # Note that this code to fail if Ellipsis indexing is used since column_names cannot be indexed using Ellipsis objects.
-            if isinstance(idx_[1], list):
-                column_names_ = [self._column_names[i] for i in idx_[1]]
+        column_names = self._get_column_names_from_indeces(idx_)
+        return NamedColumnsArray(arr, column_names)
+
+    def _get_column_names_from_indeces(self, idx):
+        column_names = self._column_names
+        if isinstance(idx, tuple):
+            # Note that this code will fail if Ellipsis indexing is used since column_names cannot be indexed using Ellipsis objects.
+            if isinstance(idx[1], list):
+                column_names = [self._column_names[i] for i in idx[1]]
             else:
-                column_names_ = self._column_names[idx_[1]]
-        return NamedColumnsArray(arr, column_names_)
+                column_names = self._column_names[idx[1]]
+        return column_names 
 
     def _getindeces(self, keys):
         # Check if columns are indexed
