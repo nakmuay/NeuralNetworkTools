@@ -8,6 +8,7 @@ from NeuralNetworkTools.tests import *
 from NeuralNetworkTools.core import *
 from NeuralNetworkTools.io import *
 
+"""
 class TestIdentificationDataDeserialization(unittest.TestCase):
 
     def setUp(self):
@@ -52,20 +53,20 @@ class TestIdentificationDataDeserialization(unittest.TestCase):
         # Compare data
         for k in expected.keys():
             np.testing.assert_array_almost_equal(actual[:, [k]].data, expected[k])
+"""
 
 class TestIdentificationDataIndexing(unittest.TestCase):
 
     def setUp(self):
-        input_data = NamedColumnsArray(np.array([[1.0, 1.1], [2.0, 2.2], [3.0, 3.3]]), ["input_1", "input_2"])
-        output_data = NamedColumnsArray(np.array([[10.0, 10.1], [20.0, 20.2], [30.0, 30.3]]), ["output_1", "output_2"])
-        self.data = IdentificationData(input_data, output_data) 
+        input_data = np.array([[1.0, 1.1], [2.0, 2.2], [3.0, 3.3]])
+        input_column_names = ["input_1", "input_2"]
+        output_data = np.array([[10.0, 10.1], [20.0, 20.2], [30.0, 30.3]])
+        output_column_names = ["output_1", "output_2"]
+        self.data = IdentificationData(input_data, output_data,
+                                        input_column_names=input_column_names, output_column_names=input_column_names) 
 
+    """
     def test_row_indexing(self):
-        iddata = self.data[:, ["input_2", "input_1"], ["output_2"]]
-        print(iddata.input_data)
-        print(iddata.output_data)
-        print()
-
         iddata = self.data[:, [0]]
         print(iddata.input_data)
         print(iddata.output_data)
@@ -91,6 +92,15 @@ class TestIdentificationDataIndexing(unittest.TestCase):
         for d in self.data:
             print(d.input_data)
             print(d.output_data)
+    """
+
+    def test_misc(self):
+        iddata = self.data[:]
+
+        print(iddata.input_column_names)
+        print(iddata.input_data)
+        print(iddata.output_column_names)
+        print(iddata.output_data)
 
 if __name__ == "__main__":
     unittest.main()
